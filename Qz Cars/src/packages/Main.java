@@ -5,10 +5,14 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) {
-        System.out.println("Hello there my fellow teaher. This is your newly bought dealership where you can sell your second-hand motorbikes,cars and others." +
-                "\nDo whatever you want with it, but be careful, do not go bankrupt! haha!\n");
-        Dealership myDealership = new Dealership();
 
+        SingletonRW readWrite = SingletonRW.getInstance();
+        Dealership myDealership = new Dealership();
+        readWrite.readObjectsFromFile(myDealership);
+        Audit audit = Audit.getInstance();
+
+        System.out.println("Hello there my fellow teacher. This is your newly bought dealership where you can sell your second-hand motorbikes,cars and others." +
+                "\nDo whatever you want with it, but be careful, do not go bankrupt! haha!\n");
 
         System.out.println("What do you want to do with your dealership?\n" +
                 "\t1) Add a vehicle\n" +
@@ -146,7 +150,7 @@ public class Main {
                             System.out.println("Wrong option");
                             break;
                     }
-
+                    audit.writePersonsToFile("Add a vehicle");
                     System.out.println("You are back to main menu\n");
                     break;
 
@@ -159,6 +163,8 @@ public class Main {
                     age = scan.nextShort();
                     Client newClient = new Client(age, name);
                     myDealership.addClient(newClient);
+                    audit.writePersonsToFile("Add a client");
+                    System.out.println("You are back to main menu\n");
                     break;
                 case 3:
                     System.out.println("What does the client want to buy?\n" +
@@ -171,44 +177,58 @@ public class Main {
 
                     choiceNew = scan.nextInt();
                     myDealership.sellVehicle(choiceNew);
+                    audit.writePersonsToFile("Calculate the price and sell a vehicle");
+                    System.out.println("You are back to main menu\n");
                     break;
                 case 4:
                     System.out.println("Vehicles are: \n");
                     myDealership.displayVehicles();
+                    audit.writePersonsToFile("Display vehicles");
                     System.out.println("You are back to main menu\n");
                     break;
                 case 5:
                     System.out.println("Clients are: \n");
                     myDealership.displayClients();
+                    audit.writePersonsToFile("Display clients");
                     System.out.println("You are back to main menu\n");
                     break;
                 case 6:
                     myDealership.vehiclesLeft();
+                    audit.writePersonsToFile("How many vehicles are in the deposit");
                     System.out.println("You are back to main menu\n");
                     break;
                 case 7:
                     myDealership.displayBrandsOrdered();
+                    audit.writePersonsToFile("Display all brands in sorted order");
                     System.out.println("You are back to main menu\n");
                     break;
                 case 8:
                     myDealership.displayTotalCostDeposit();
+                    audit.writePersonsToFile("Display the total cost of the vehicles in the deposit");
                     System.out.println("You are back to main menu\n");
                     break;
                 case 9:
                     myDealership.displayMostExpensive();
+                    audit.writePersonsToFile("Display the most expensive vehicle");
                     System.out.println("You are back to main menu\n");
                     break;
                 case 10:
                     myDealership.displayLeastExpensive();
+                    audit.writePersonsToFile("Display the least expensive vehicle");
+                    System.out.println("Display the least expensive vehicle");
                     System.out.println("You are back to main menu\n");
                     break;
                 case -1:
-                    System.out.println("Application closed");
+                    System.out.println("Application closed\n");
+                    audit.writePersonsToFile("Quit the application");
                     break;
                 default:
                     System.out.println("Wrong option!");
+                    System.out.println("You are back to main menu\n");
                     break;
             }
         } while (!choice.equals(-1));
+
+        readWrite.writeObjectsToFile(myDealership);
     }
 }
